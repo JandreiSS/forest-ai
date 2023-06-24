@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none !important;
+}
+
+.overflow-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.overflow-hide {
+    -ms-overflow-style: none; /* Internet Explorer e Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+/*TODO Verificar Versão do GLightBox (https://github.com/biati-digital/glightbox/issues/22)*/
+.glightbox-open {
+    height: auto; 
+}
+
+html.glightbox-open {
+    overflow: initial;
+}
