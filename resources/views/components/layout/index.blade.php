@@ -7,8 +7,11 @@
     <title>Forest AI</title>
     @vite('resources/css/app.css')
 </head>
-<body>
-    <x-layout.header></x-layout.header>
-    {{ $slot }}
+<body class="bg-teal-500">
+    <x-layout.nav-header />
+
+    <div class="px-16 py-8">
+        {{ $slot }}
+    </div>
 </body>
 </html>
