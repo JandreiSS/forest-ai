@@ -1,4 +1,4 @@
-<div class="bg-teal-100 w-full h-16 flex">
+<div class="bg-green-950 w-full h-16 flex">
     <div class="flex items-center px-3 gap-4">
         <x-application-logo />
     </div>

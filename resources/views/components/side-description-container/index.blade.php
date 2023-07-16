@@ -10,7 +10,7 @@
 @endphp
 
 <div {{ $attributes->merge(['class' => $classes ]) }}>
-    <div class="sm:col-span-12 lg:col-span-3">
+    <div class="sm:col-span-12 lg:col-span-3 space-y-2">
         <x-h2.index class="text-neutral-600">
             {{ $title }}
         </x-h2.index>
