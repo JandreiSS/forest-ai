@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('dashboard');
 });
+
+Route::post('/upload-image', [ImageController::class, 'upload'])->name('upload-image');

@@ -2,10 +2,10 @@
     <div x-on:dragover="event.preventDefault()" x-on:drop="image = event.dataTransfer.files[0]">
         <label for="fileInput" class="relative cursor-pointer">
             <input id="fileInput" type="file" x-ref="fileInput" class="sr-only" x-on:change="image = $refs.fileInput.files[0]">
-            <div x-show="!image" class="border-2 border-dashed border-gray-400 p-4 text-center rounded hover:bg-gray-100 hover:border-gray-600 hover:cursor-pointer">
-                <div class="flex flex-col items-center justify-center h-full">
-                    <p class="text-gray-600">Arraste e solte a imagem aqui</p>
-                    <p class="text-gray-400">ou</p>
+            <div x-show="!image" class="border-2 border-dashed border-neutral-400 p-4 text-center rounded hover:bg-neutral-100 hover:border-neutral-600 hover:cursor-pointer">
+                <div class="flex flex-col items-center justify-center h-full space-y-2">
+                    <p class="text-neutral-400">Arraste e solte a imagem aqui</p>
+                    <p class="text-neutral-400">ou</p>
                     <span class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Selecione uma imagem</span>
                 </div>
             </div>

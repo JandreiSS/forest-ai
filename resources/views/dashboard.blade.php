@@ -3,7 +3,7 @@
         <div class="col-start-3 col-span-8">
             <x-h1 class="mb-4">Forest AI</x-h1>
             
-            <x-side-description-container.index class="bg-green-800 rounded p-3 shadow-md">
+            <x-side-description-container.index class="bg-green-700 rounded p-3 shadow-md">
                 <x-slot name="title">
                     Classificador
                 </x-slot>
