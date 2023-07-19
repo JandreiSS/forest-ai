@@ -3,23 +3,30 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class ImageController extends Controller
 {
     public function upload(Request $request)
     {
-        // Salva a imagem no disco temporário
-        $imagePath = $request->file('image')->store('temp');
+        $request->validate([
+            'image' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+        ]);
+        
+        $image = $request->file('image');
+        $originalName = $request->file('image')->getClientOriginalName();
 
-        // Chama o script Python passando o caminho da imagem
-        $pythonScript = 'path/to/your/python/script.py';
-        $pythonCommand = "python {$pythonScript} {$imagePath}";
-        $output = shell_exec($pythonCommand);
+        $response = Http::post('http://localhost:5000/classify', [
+            'image' => $image
+        ]);
 
-        // Processa o resultado da classificação
-        $classificationResult = json_decode($output, true);
+        if($response->successful()) {
+            $classificationResults = $response->json();
 
-        // Retorna a resposta para o frontend
-        return response()->json($classificationResult);
+            return view('classifications', ['results' => $classificationResults, 'originalName' => $originalName]);
+        } else {
+            return response(['error' => 'Erro na requisição'], $response->status());
+        }
+
     }
 }
