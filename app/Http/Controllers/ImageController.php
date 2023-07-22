@@ -2,31 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class ImageController extends Controller
 {
-    public function upload(Request $request)
+    public function sendImageToAPI(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+            'image' => 'required|image|mimes:jpg,png,jpeg|max:4096',
+        ], [
+            'image.required' => 'A imagem é obrigatória.',
+            'image.mimes' => 'A imagem deve ser um arquivo do tipo: :values.',
+            'image.max' => 'A imagem não deve ter mais de :max kilobytes.',
         ]);
+
+        $client = new Client(['verify' => false]);
         
         $image = $request->file('image');
-        $originalName = $request->file('image')->getClientOriginalName();
 
-        $response = Http::post('http://localhost:5000/classify', [
-            'image' => $image
+        $imagePath = $image->getPathName();
+        dd($imagePath);
+        $originalName = $image->getClientOriginalName();
+
+        $response = $client->request('POST', 'http://127.0.0.1:5000/classify', [
+            'multipart' => [
+                [
+                    'name' => 'image',
+                    'contents' => fopen($imagePath, 'r')
+                ]
+            ]
         ]);
 
-        if($response->successful()) {
-            $classificationResults = $response->json();
-
-            return view('classifications', ['results' => $classificationResults, 'originalName' => $originalName]);
-        } else {
-            return response(['error' => 'Erro na requisição'], $response->status());
-        }
-
+        $responseBody = $response->getBody();
+        $jsonResponse = json_decode($responseBody, true);
+    
+        return view('classifications', compact(['response' => $jsonResponse, 'name' => $originalName]));
     }
 }

@@ -18,4 +18,4 @@ Route::get('/', function () {
     return view('dashboard');
 });
 
-Route::post('/upload-image', [ImageController::class, 'upload'])->name('upload-image');
+Route::post('/upload-image', [ImageController::class, 'sendImageToAPI'])->name('upload-image');
