@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class ImageController extends Controller
@@ -17,26 +16,29 @@ class ImageController extends Controller
             'image.max' => 'A imagem não deve ter mais de :max kilobytes.',
         ]);
 
-        $client = new Client(['verify' => false]);
-        
         $image = $request->file('image');
-
         $imagePath = $image->getPathName();
-        dd($imagePath);
         $originalName = $image->getClientOriginalName();
 
-        $response = $client->request('POST', 'http://127.0.0.1:5000/classify', [
-            'multipart' => [
-                [
-                    'name' => 'image',
-                    'contents' => fopen($imagePath, 'r')
-                ]
-            ]
+        // Iniciar cURL
+        $ch = curl_init();
+
+        // Configurar a requisição
+        curl_setopt($ch, CURLOPT_URL, 'http://127.0.0.1:5000/classify');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, [
+            'image' => new \CURLFile($imagePath, $image->getClientMimeType(), $originalName)
         ]);
 
-        $responseBody = $response->getBody();
+        // Executar a requisição e obter a resposta
+        $responseBody = curl_exec($ch);
+
+        // Fechar cURL
+        curl_close($ch);
+
         $jsonResponse = json_decode($responseBody, true);
-    
-        return view('classifications', compact(['response' => $jsonResponse, 'name' => $originalName]));
+
+        return view('classifications/index', ['results' => $jsonResponse, 'originalName' => $originalName]);
     }
 }
